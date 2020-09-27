@@ -5,14 +5,17 @@ import crypto from 'crypto';
 import sequelize from '../../config/db';
 
 interface UserInstance extends Model {
+  readonly id: number;
   name: string;
   password: string;
+  getSignedJwtToken(): string;
   getResetToken(): string;
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
 type UserStatic = typeof Model & {
   new (values?: object, options?: BuildOptions): UserInstance;
+  associate: any;
 };
 
 const User = <UserStatic>sequelize.define('users', {
@@ -50,6 +53,8 @@ const User = <UserStatic>sequelize.define('users', {
   resetPasswordToken: DataTypes.STRING,
   resetPasswordExpire: DataTypes.DATE,
 });
+
+User.associate = function associate() {};
 
 User.prototype.getSignedJwtToken = function () {
   return jwt.sign({ id: this.id }, process.env.SECRET_KEY!, {
