@@ -1,23 +1,20 @@
 import chalk from 'chalk';
 import expressStatusMonitor from 'express-status-monitor';
-import sequelize from './config/db';
-import { associate } from './components/Associate';
+import db from './config/db';
 
 import { app } from './app';
 
-const server = sequelize.sync().then(() => {
+const server = db.sync().then(() => {
   app.listen(app.get('port'), () => {
     console.log(
       '%s App is running at http://localhost:%d in %s mode',
       chalk.green('✓'),
       app.get('port'),
-      app.get('env'),
+      app.get('env')
     );
     console.log('  Press CTRL-C to stop\n');
   });
 });
-
-associate();
 
 // Web sockets setup
 const io = require('socket.io')(server);

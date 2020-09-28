@@ -24,41 +24,41 @@ const User = <UserStatic>sequelize.define('users', {
     allowNull: false,
     validate: {
       isAlphanumeric: {
-        msg: 'The username can only contain letters and numbers',
+        msg: 'The username can only contain letters and numbers'
       },
       len: {
         args: [4, 15],
-        msg: 'The username needs to be between 4 and 15 characteres long',
-      },
-    },
+        msg: 'The username needs to be between 4 and 15 characteres long'
+      }
+    }
   },
   bio: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: true
   },
   email: {
     type: DataTypes.STRING,
     validate: {
-      isEmail: true,
+      isEmail: true
     },
-    allowNull: false,
+    allowNull: false
   },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      min: 6,
-    },
+      min: 6
+    }
   },
   resetPasswordToken: DataTypes.STRING,
-  resetPasswordExpire: DataTypes.DATE,
+  resetPasswordExpire: DataTypes.DATE
 });
 
 User.associate = function associate() {};
 
 User.prototype.getSignedJwtToken = function () {
   return jwt.sign({ id: this.id }, process.env.SECRET_KEY!, {
-    expiresIn: 36000,
+    expiresIn: 36000
   });
 };
 
@@ -68,10 +68,7 @@ User.prototype.matchPassword = async function (enteredPassword: string) {
 
 User.prototype.getResetToken = function () {
   const resetToken = crypto.randomBytes(20).toString('hex');
-  this.resetPasswordToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
