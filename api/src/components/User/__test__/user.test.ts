@@ -1,6 +1,6 @@
-import db from '../../db/index';
+import db from '../../../db/index';
 import * as faker from 'faker';
-import { createUser, doesUserExist } from './userService';
+import { createUser, doesUserExist } from '../userService';
 
 describe('test the User service', () => {
   let Db: any = db;

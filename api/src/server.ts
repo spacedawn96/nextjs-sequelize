@@ -1,10 +1,12 @@
 import chalk from 'chalk';
 import expressStatusMonitor from 'express-status-monitor';
-import db from './config/db';
 
 import { app } from './app';
+import { associate } from './components/Associate';
+import sequelize from './config/db';
 
-const server = db.sync().then(() => {
+associate();
+const server = sequelize.sync().then(() => {
   app.listen(app.get('port'), () => {
     console.log(
       '%s App is running at http://localhost:%d in %s mode',

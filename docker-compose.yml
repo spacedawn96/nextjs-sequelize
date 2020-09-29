@@ -18,8 +18,8 @@ services:
     command: sh -c "npm run db-migrate && npm run run-dev"
     container_name: pc-api-dev
     environment:
-      DB_USER: user
-      DB_PASSWORD: password
+      DB_USER: postgres
+      DB_PASSWORD: 1245
       DB_NAME: myapp1
       DB_HOST: db
       DB_PORT: 5432

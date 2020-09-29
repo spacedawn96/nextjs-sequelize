@@ -1,8 +1,16 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import ErrorResponse from '../../utils/errorHandle';
 import asyncHandler from '../../middlewares/asyncHandler';
-import { createUser, doesUserExist, findUser } from './userService';
-import db from '../../config/db';
+import {
+  createUser,
+  doesUserExist,
+  editProfile,
+  findUser,
+  findUserAll,
+  findUserDetail,
+  findUserId
+} from './userService';
+import sequelize from '../../db/index';
 
 export const register: RequestHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -22,8 +30,8 @@ export const register: RequestHandler = asyncHandler(
     }
 
     try {
-      db.transaction(async (t) => {
-        const user = await createUser(credentials);
+      sequelize.transaction(async (t) => {
+        const user = await createUser(credentials, t);
         const token = await user.getSignedJwtToken();
         return res.status(200).send({
           meta: {
@@ -71,6 +79,68 @@ export const login: RequestHandler = asyncHandler(
       });
     } catch (e) {
       throw next(new ErrorResponse(`something went to wrong`, 500));
+    }
+  }
+);
+
+export const getProfile: RequestHandler = asyncHandler(
+  async (req: any, res: Response, next: NextFunction) => {
+    const userId = req.user.id;
+
+    const user = await findUserId(userId);
+
+    if (!user) {
+      throw next(new ErrorResponse(`No user found`, 404));
+    }
+
+    const name = req.params.name;
+
+    const findUser = await findUserDetail(name);
+
+    if (findUser) {
+      findUser.UserFollowers.forEach((item: any) => {
+        if (item.followerId === user) {
+          findUser.setDataValue('isFollowing', true);
+        } else if (item.followerId === user) {
+          findUser.setDataValue('isFollowing', false);
+        }
+      });
+      return res.status(200).send(findUser);
+    } else {
+      throw next(new ErrorResponse('User Not Found', 500));
+    }
+  }
+);
+
+export const getUsers: RequestHandler = asyncHandler(
+  async (req: any, res: Response, next: NextFunction) => {
+    const users = await findUserAll();
+    users.forEach((user) => {
+      if (user.UserFollowings.length && user.UserFollowers.length === 0) {
+        user.setDataValue('isFollowing', false);
+      }
+    });
+    return res.json(users);
+  }
+);
+
+export const updateProfile: RequestHandler = asyncHandler(
+  async (req: any, res: Response, next: NextFunction) => {
+    const updateData = req.body.bio;
+
+    console.log(updateData);
+    try {
+      const result = await sequelize.transaction(async (t) => {
+        await editProfile(updateData, req.user.id, t);
+        const userId = await findUserId(req.user.id);
+
+        return res.status(200).send({
+          message: 'Profile Updated Successfully',
+          user: userId
+        });
+      });
+    } catch (err) {
+      throw next(new ErrorResponse('Some Thing Went Wrong', 500));
     }
   }
 );

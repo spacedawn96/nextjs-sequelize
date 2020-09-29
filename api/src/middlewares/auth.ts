@@ -2,15 +2,12 @@ import jwt from 'jsonwebtoken';
 import asyncHandler from './asyncHandler';
 
 import User from '../components/User/user';
-import ErrorResponse from 'src/utils/errorHandle';
+import ErrorResponse from '../utils/errorHandle';
 
 export const protect = asyncHandler(async (req: any, res: any, next: any) => {
   let token;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
   } else if (req.cookies.token) {
     token = req.cookies.token;
@@ -36,10 +33,7 @@ export const authorize = (...roles: string[]) => {
   return (req: any, res: any, next: any) => {
     if (!roles.includes(req.user.role)) {
       return next(
-        new ErrorResponse(
-          `User role ${req.user.role} is not authorized to access this route`,
-          403,
-        ),
+        new ErrorResponse(`User role ${req.user.role} is not authorized to access this route`, 403)
       );
     }
     next();

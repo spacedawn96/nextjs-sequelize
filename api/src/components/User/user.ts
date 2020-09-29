@@ -3,8 +3,12 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import sequelize from '../../config/db';
+import Post from '../Post/post';
+import Followers from '../Followers/followers';
+import Following from '../Following/following';
 
 interface UserInstance extends Model {
+  [x: string]: any;
   readonly id: number;
   name: string;
   password: string;
@@ -54,7 +58,34 @@ const User = <UserStatic>sequelize.define('users', {
   resetPasswordExpire: DataTypes.DATE
 });
 
-User.associate = function associate() {};
+User.associate = function associate() {
+  User.hasMany(Post, {
+    foreignKey: 'userId',
+    as: 'author',
+    onDelete: 'CASCADE'
+  });
+  User.hasMany(Followers, {
+    foreignKey: 'userId',
+    onDelete: 'CASCADE',
+    as: 'UserFollowers'
+  });
+  User.hasMany(Followers, {
+    foreignKey: 'followerId',
+    onDelete: 'CASCADE',
+    as: 'followerDetails'
+  });
+  User.hasMany(Following, {
+    foreignKey: 'userId',
+    onDelete: 'CASCADE',
+    as: 'UserFollowings'
+  });
+
+  User.hasMany(Following, {
+    foreignKey: 'following',
+    onDelete: 'CASCADE',
+    as: 'followingDetails'
+  });
+};
 
 User.prototype.getSignedJwtToken = function () {
   return jwt.sign({ id: this.id }, process.env.SECRET_KEY!, {
