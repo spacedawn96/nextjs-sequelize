@@ -136,7 +136,7 @@ export const updateProfile: RequestHandler = asyncHandler(
 
         return res.status(200).send({
           message: 'Profile Updated Successfully',
-          user: userId
+          user: updateData
         });
       });
     } catch (err) {

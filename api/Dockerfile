@@ -1,9 +1,13 @@
 FROM node:12
-WORKDIR /usr/src/app
+WORKDIR /home/app/api
+
+ENV PATH /home/app/api/node_modules/.bin:$PATH
+
+
 COPY package*.json ./
 COPY yarn.lock ./
 RUN yarn
 COPY . .
-EXPOSE 8080
+EXPOSE 3001
 
 CMD [ "node", "dist/index.js" ]
