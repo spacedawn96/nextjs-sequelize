@@ -3,7 +3,8 @@ import expressStatusMonitor from 'express-status-monitor';
 
 import { app } from './app';
 import { associate } from './components/Associate';
-import sequelize from './config/db';
+import sequelize from './db';
+
 
 associate();
 const server = sequelize.sync().then(() => {

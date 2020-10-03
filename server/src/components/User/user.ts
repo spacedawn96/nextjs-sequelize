@@ -2,10 +2,11 @@ import { DataTypes, Model, BuildOptions } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import sequelize from '../../config/db';
 import Post from '../Post/post';
 import Followers from '../Followers/followers';
 import Following from '../Following/following';
+import sequelize from '../../db';
+
 
 interface UserInstance extends Model {
   [x: string]: any;
@@ -54,8 +55,6 @@ const User = <UserStatic>sequelize.define('users', {
       min: 6
     }
   },
-  resetPasswordToken: DataTypes.STRING,
-  resetPasswordExpire: DataTypes.DATE
 });
 
 User.associate = function associate() {

@@ -1,5 +1,5 @@
 import { DataTypes, Model, BuildOptions } from 'sequelize';
-import sequelize from '../../config/db';
+import sequelize from '../../db';
 import Comment from '../Comment.ts/comments';
 import PostLike from '../PostLike.ts/postLike';
 import User from '../User/user';

@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "dev": "ts-node --project ./src/tsconfig.server.json ./src/server.ts",
+    "start": "NODE_ENV=production && next build ./src && next start ./src",
+    "test": "jest --detectOpenHandles",
+    "update-all": "npx npm-check-updates -u"
   },
   "dependencies": {
     "next": "9.5.3",

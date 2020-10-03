@@ -30,7 +30,7 @@ export const doesUserExist = async (credentials: credentials) => {
   return isUserExist;
 };
 
-export const createUser = async (credentials: credentials, t: any) => {
+export const createUser = async (credentials: credentials, t?: any) => {
   const user = await User.create(
     {
       name: credentials.name,

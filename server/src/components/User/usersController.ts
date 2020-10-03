@@ -10,7 +10,7 @@ import {
   findUserDetail,
   findUserId
 } from './userService';
-import sequelize from '../../db/index';
+import sequelize from '../../db';
 
 export const register: RequestHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

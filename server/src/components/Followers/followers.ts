@@ -1,5 +1,5 @@
 import { DataTypes, Model, BuildOptions } from 'sequelize';
-import sequelize from '../../config/db';
+import sequelize from '../../db';
 import User from '../User/user';
 
 interface Followers extends Model {

@@ -2,6 +2,9 @@ import db from '../../../db/index';
 import * as faker from 'faker';
 import { createUser, doesUserExist } from '../userService';
 
+
+
+
 describe('test the User service', () => {
   let Db: any = db;
 
@@ -13,11 +16,13 @@ describe('test the User service', () => {
     const randomString = faker.random.alphaNumeric(10);
     const password = `password`;
 
-    await createUser({
+    const user ={
       name: `John`,
       email: `user-${randomString}@email.com`,
       password
-    });
+    }
+
+    await createUser(user , );
 
     const UserExist = await doesUserExist({
       name: `John`,
