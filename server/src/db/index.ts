@@ -4,7 +4,7 @@ if (process.env.NODE_ENV === 'production') {
   var sequelize = new Sequelize(process.env.DATABASE_URL!);
 } else {
   var sequelize = new Sequelize('myapp1', 'postgres', '1245', {
-    host: 'postgres',
+    host: process.env.DB_HOST || 'localhost',
     dialect: 'postgres',
     pool: {
       max: 100,

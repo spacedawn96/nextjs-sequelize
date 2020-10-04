@@ -23,7 +23,9 @@ export const register: RequestHandler = asyncHandler(
     if (UserExist) {
       throw next(
         new ErrorResponse(
-          `user: ${credentials.email || credentials.name} is already registered`,
+          `user: ${
+            credentials.email || credentials.name
+          } is already registered`,
           403
         )
       );
@@ -33,6 +35,7 @@ export const register: RequestHandler = asyncHandler(
       sequelize.transaction(async (t) => {
         const user = await createUser(credentials, t);
         const token = await user.getSignedJwtToken();
+
         return res.status(200).send({
           meta: {
             type: 'success',
@@ -55,13 +58,16 @@ export const login: RequestHandler = asyncHandler(
     const user = await findUser(credentials);
     if (!user) {
       throw next(
-        new ErrorResponse(`this account ${credentials.username} is not yet registered`, 403)
+        new ErrorResponse(
+          `this account ${credentials.username} is not yet registered`,
+          403
+        )
       );
     }
 
-    const token = await user.getSignedJwtToken();
-
-    const isMatched = await user.matchPassword(credentials.password);
+    const [token, isMatched] = await Promise.all([
+      [user.getSignedJwtToken(), user.matchPassword(credentials.password)]
+    ]);
 
     if (!isMatched) {
       throw next(new ErrorResponse('invalid password', 403));
@@ -128,11 +134,12 @@ export const updateProfile: RequestHandler = asyncHandler(
   async (req: any, res: Response, next: NextFunction) => {
     const updateData = req.body.bio;
 
-    console.log(updateData);
     try {
       const result = await sequelize.transaction(async (t) => {
-        await editProfile(updateData, req.user.id, t);
-        const userId = await findUserId(req.user.id);
+        await Promise.all([
+          editProfile(updateData, req.user.id, t),
+          findUserId(req.user.id)
+        ]);
 
         return res.status(200).send({
           message: 'Profile Updated Successfully',

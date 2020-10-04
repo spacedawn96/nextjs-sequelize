@@ -7,7 +7,6 @@ import Followers from '../Followers/followers';
 import Following from '../Following/following';
 import sequelize from '../../db';
 
-
 interface UserInstance extends Model {
   [x: string]: any;
   readonly id: number;
@@ -54,7 +53,7 @@ const User = <UserStatic>sequelize.define('users', {
     validate: {
       min: 6
     }
-  },
+  }
 });
 
 User.associate = function associate() {
@@ -98,7 +97,10 @@ User.prototype.matchPassword = async function (enteredPassword: string) {
 
 User.prototype.getResetToken = function () {
   const resetToken = crypto.randomBytes(20).toString('hex');
-  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };

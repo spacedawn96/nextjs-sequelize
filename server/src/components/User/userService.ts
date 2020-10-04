@@ -13,17 +13,18 @@ interface userData {
 }
 
 export const doesUserExist = async (credentials: credentials) => {
-  const registeredEmail = await User.findOne({
-    where: {
-      email: credentials.email
-    }
-  });
-
-  const registeredUserName = await User.findOne({
-    where: {
-      name: credentials.name
-    }
-  });
+  const [registeredEmail, registeredUserName]: any = await Promise.all([
+    User.findOne({
+      where: {
+        email: credentials.email
+      }
+    }),
+    User.findOne({
+      where: {
+        name: credentials.name
+      }
+    })
+  ]);
 
   const isUserExist = registeredEmail && registeredUserName;
 
@@ -118,7 +119,11 @@ export const findUserAll = async () => {
   return users;
 };
 
-export const editProfile = async (userData: userData, curUser: number, t: any) => {
+export const editProfile = async (
+  userData: userData,
+  curUser: number,
+  t: any
+) => {
   const updateUser = User.update(
     {
       bio: userData
