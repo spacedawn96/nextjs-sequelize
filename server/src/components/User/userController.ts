@@ -55,25 +55,25 @@ export const register: RequestHandler = asyncHandler(
 export const login: RequestHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const credentials = req.body;
-    const user = await findUser(credentials);
-    if (!user) {
-      throw next(
-        new ErrorResponse(
-          `this account ${credentials.username} is not yet registered`,
-          403
-        )
-      );
-    }
-
-    const [token, isMatched] = await Promise.all([
-      [user.getSignedJwtToken(), user.matchPassword(credentials.password)]
-    ]);
-
-    if (!isMatched) {
-      throw next(new ErrorResponse('invalid password', 403));
-    }
-
     try {
+      const user = await findUser(credentials);
+      if (!user) {
+        throw next(
+          new ErrorResponse(
+            `this account ${credentials.username} is not yet registered`,
+            403
+          )
+        );
+      }
+
+      const [token, isMatched] = await Promise.all([
+        [user.getSignedJwtToken(), user.matchPassword(credentials.password)]
+      ]);
+
+      if (!isMatched) {
+        throw next(new ErrorResponse('invalid password', 403));
+      }
+
       res.status(200).send({
         meta: {
           type: 'success',
