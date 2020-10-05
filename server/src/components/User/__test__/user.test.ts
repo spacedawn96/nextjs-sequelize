@@ -6,7 +6,7 @@ describe('test the User service', () => {
   let Db: any = db;
 
   beforeAll(async () => {
-    await Db.sequelize.sync({ force: true });
+    await Db.sync({ force: true });
   });
 
   it('should return user details if a user exists', async () => {
@@ -44,7 +44,7 @@ describe('test the User service', () => {
   });
 
   afterAll(async (done) => {
-    await Db.sequelize.close();
+    await Db.close();
     done();
   });
 });

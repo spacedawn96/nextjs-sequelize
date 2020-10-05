@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "NODE_ENV=local nodemon src/server.ts",
     "test": "chmod +x ./bin/test.sh && NODE_ENV=test-docker ./bin/test.sh",
-    "test-local": "NODE_ENV=local mocha --recursive --exit",
-    "start": "nodemon src/server.ts"
+    "test-local": "SET NODE_ENV=test & jest --detectOpenHandles",
+    "start": "nodemon src/server.ts",
+    "update-all": "npx npm-check-updates -u"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "@types/express": "^4.17.8",
     "@types/express-status-monitor": "^1.2.2",
     "@types/faker": "^5.1.2",
+    "@types/jest": "^26.0.14",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.10.2",
@@ -43,7 +45,8 @@
     "ts-jest": "^26.4.0",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.63",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "win-node-env": "^0.4.0"
   },
   "devDependencies": {
     "jest": "^26.4.2"
