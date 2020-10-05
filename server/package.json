@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "dev": "NODE_ENV=local nodemon src/server.ts",
+    "dev": "SET NODE_ENV=local & nodemon src/server.ts",
     "test": "chmod +x ./bin/test.sh && NODE_ENV=test-docker ./bin/test.sh",
     "test-local": "SET NODE_ENV=test & jest --detectOpenHandles",
     "start": "nodemon src/server.ts",
