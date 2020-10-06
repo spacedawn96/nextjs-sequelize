@@ -4,7 +4,12 @@ import asyncHandler from '../../middlewares/asyncHandler';
 import ErrorResponse from '../../utils/errorHandle';
 import User from '../User/user';
 import Comment from './comments';
-import { getALLComments, updateComment } from './commentService';
+import {
+  createCom,
+  findComment,
+  getALLComments,
+  updateComment
+} from './commentService';
 
 export const getPostCommments: RequestHandler = asyncHandler(
   async (req: any, res: Response, next: NextFunction) => {
@@ -52,24 +57,13 @@ export const postComment: RequestHandler = asyncHandler(
     };
 
     try {
-      await Comment.create(postData).then((comment) => {
-        Comment.findOne({
-          where: {
-            id: comment.id
-          },
-          include: [
-            {
-              model: User,
-              as: 'author',
-              attributes: ['name']
-            }
-          ]
-        }).then(async (newComment) => {
-          return res.status(200).send({
-            message: 'comment created',
-            comment: newComment
-          });
-        });
+      const created = await createCom(postData);
+
+      const getCom = await findComment(created.id);
+
+      return res.status(200).send({
+        message: 'comment created',
+        comment: getCom
       });
     } catch (error) {
       throw next(new ErrorResponse('Failed to write a comment', 500));

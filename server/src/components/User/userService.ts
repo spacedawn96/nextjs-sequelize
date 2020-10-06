@@ -136,5 +136,5 @@ export const editProfile = async (
     }
   );
 
-  return updateUser;
+  return true;
 };

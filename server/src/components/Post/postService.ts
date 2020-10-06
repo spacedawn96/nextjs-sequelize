@@ -68,32 +68,35 @@ export const Posts = async () => {
 };
 
 export const PostCreate = async (postData: postData) => {
-  const createPost = await Post.create(postData).then((post) => {
-    Post.findOne({
-      where: {
-        id: post.id
-      },
-      include: [
-        {
-          model: User,
-          as: 'author',
-          attributes: ['name']
-        },
-        {
-          model: Comment,
-          include: [
-            {
-              model: User,
-              as: 'author',
-              attributes: ['name']
-            }
-          ]
-        }
-      ]
-    });
-  });
+  const createPost = await Post.create(postData);
 
   return createPost;
+};
+
+export const FindPost = async (post: any) => {
+  const findPost = Post.findOne({
+    where: {
+      id: post.id
+    },
+    include: [
+      {
+        model: User,
+        as: 'author',
+        attributes: ['name']
+      },
+      {
+        model: Comment,
+        include: [
+          {
+            model: User,
+            as: 'author',
+            attributes: ['name']
+          }
+        ]
+      }
+    ]
+  });
+  return findPost;
 };
 
 export const updatePost = async (title: string, body: string, id: number) => {
@@ -103,7 +106,6 @@ export const updatePost = async (title: string, body: string, id: number) => {
       body: body ? body : ''
     },
     {
-      returning: true,
       where: {
         id
       }

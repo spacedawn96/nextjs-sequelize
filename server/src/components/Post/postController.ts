@@ -5,8 +5,14 @@ import Post from './post';
 import User from '../User/user';
 import PostLike from '../PostLike.ts/postLike';
 import Comment from '../Comment.ts/comments';
-import ErrorResponse from 'src/utils/errorHandle';
-import { getpostPage, Posts, PostCreate, updatePost } from './postService';
+import ErrorResponse from '../../utils/errorHandle';
+import {
+  getpostPage,
+  Posts,
+  PostCreate,
+  updatePost,
+  FindPost
+} from './postService';
 
 export const postPage: RequestHandler = asyncHandler(
   async (req: any, res: Response) => {
@@ -34,9 +40,11 @@ export const createPost: RequestHandler = asyncHandler(
 
     try {
       const getPost = await PostCreate(postData);
+
+      const findPost = await FindPost(getPost);
       return res.status(200).send({
         message: 'post created',
-        getPost
+        findPost
       });
     } catch (e) {
       throw next(new ErrorResponse(`something went to wrong`, 500));

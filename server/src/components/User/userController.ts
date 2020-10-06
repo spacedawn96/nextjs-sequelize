@@ -66,11 +66,14 @@ export const login: RequestHandler = asyncHandler(
         );
       }
 
-      const [token, isMatched] = await Promise.all([
-        [user.getSignedJwtToken(), user.matchPassword(credentials.password)]
-      ]);
+      const promises = [
+        user.getSignedJwtToken(),
+        user.matchPassword(credentials.password)
+      ];
+      const [token, isMatched] = (await Promise.allSettled(promises)) as any;
 
-      if (!isMatched) {
+      const failPromises = isMatched.value === false;
+      if (failPromises) {
         throw next(new ErrorResponse('invalid password', 403));
       }
 

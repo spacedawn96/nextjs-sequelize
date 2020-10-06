@@ -1,6 +1,12 @@
 import db from '../../../db/index';
 import * as faker from 'faker';
-import { createUser, doesUserExist, findUser } from '../userService';
+import {
+  createUser,
+  doesUserExist,
+  editProfile,
+  findUser
+} from '../userService';
+import sequelize from '../../../db/index';
 
 describe('test the User service', () => {
   let Db: any = db;

@@ -6,6 +6,7 @@ import compression from 'compression';
 import cors from 'cors';
 import errorHandler from './middlewares/errorHandler';
 import user from './components/User';
+import post from './components/Post';
 import followers from './components/Followers';
 import dotenv from 'dotenv';
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(cors());
 
 app.use('/api/v1/users', user, followers);
+app.use('/api/v1/post', post);
 
 app.use(errorHandler);
 

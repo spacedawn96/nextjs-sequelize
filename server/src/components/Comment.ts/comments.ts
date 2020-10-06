@@ -4,7 +4,7 @@ import Post from '../Post/post';
 import User from '../User/user';
 
 interface Comment extends Model {
-  readonly id: number;
+  id: number;
   title: string;
   postId: number;
   userId: number;
