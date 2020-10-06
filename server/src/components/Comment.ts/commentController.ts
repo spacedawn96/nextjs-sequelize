@@ -4,19 +4,11 @@ import asyncHandler from '../../middlewares/asyncHandler';
 import ErrorResponse from '../../utils/errorHandle';
 import User from '../User/user';
 import Comment from './comments';
+import { getALLComments, updateComment } from './commentService';
 
 export const getPostCommments: RequestHandler = asyncHandler(
   async (req: any, res: Response, next: NextFunction) => {
-    const comments = await Comment.findAll({
-      include: [
-        {
-          model: User,
-          as: 'author',
-          attributes: ['name']
-        }
-      ],
-      order: [['createdAt', 'DESC']]
-    });
+    const comments = await getALLComments();
     return res.json(comments);
   }
 );
@@ -31,21 +23,15 @@ export const editComment: RequestHandler = asyncHandler(
       throw next(new ErrorResponse(`Can't edit another users post`, 401));
     } else {
       try {
-        transaction = await sequelize.transaction();
-        return Comment.update(
-          {
-            title: req.body.title ? req.body.title : ''
-          },
-          {
-            returning: true,
-            where: {
-              id: req.params.commentId
-            }
-          }
-        ).then((comments) => {
+        const result = await sequelize.transaction(async (t) => {
+          const Comment = await updateComment(
+            req.body.title,
+            req.params.commentId,
+            t
+          );
           return res.status(200).send({
             message: 'Comment Edited Successfully',
-            comments
+            Comment
           });
         });
       } catch (err) {
@@ -105,7 +91,7 @@ export const deleteComment: RequestHandler = asyncHandler(
           where: {
             id: req.params.id
           }
-        }).then((a) => {
+        }).then(() => {
           return res.status(200).send({
             message: 'delete comment!',
             result

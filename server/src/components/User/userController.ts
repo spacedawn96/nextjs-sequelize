@@ -32,7 +32,7 @@ export const register: RequestHandler = asyncHandler(
     }
 
     try {
-      sequelize.transaction(async (t) => {
+      const result = await sequelize.transaction(async (t) => {
         const user = await createUser(credentials, t);
         const token = await user.getSignedJwtToken();
 

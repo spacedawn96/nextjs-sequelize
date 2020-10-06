@@ -53,7 +53,7 @@ export const editPost: RequestHandler = asyncHandler(
     const id = req.params.postId;
 
     if (req.params.userId != currentUser) {
-      throw new ErrorResponse(`Can't edit another users post`, 401);
+      throw next(new ErrorResponse(`Can't edit another users post`, 401));
     } else {
       try {
         const update = await updatePost(title, body, id);
