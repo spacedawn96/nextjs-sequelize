@@ -1,8 +1,16 @@
 version: '3'
 services:
+  client_dev:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    command: sh -c "npm run start"
+    volumes:
+      - ./client:/home/app/client
+      - /home/app/client/node_modules
   app:
     build: ./server
-    dockerfile: Dockerfile.prod
+    dockerfile: Dockerfile
     ports:
       - '8080:8080'
     depends_on:
