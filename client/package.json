@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "cypress-cra",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,7 +11,6 @@
     "@types/react-dom": "^16.9.8",
     "cypress": "^5.0.0",
     "cypress-hmr-restarter": "^1.4.1",
-    "is-ci": "^2.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
@@ -20,21 +19,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:cli": "cross-env BROWSER=none react-scripts start",
-    "build": "react-scripts build --profile",
-    "test": "is-ci \"test:coverage\" \"test:watch\"",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --watch=false --coverage",
-    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --watch --runInBand",
+    "build": "react-scripts build",
     "cypress:start:app": "react-scripts -r @cypress/instrument-cra start",
     "cypress:start:wait": "start-server-and-test cypress:start:app http://localhost:3000",
     "cypress:open": "npm run cypress:start:wait -- \"cypress open\"",
     "cypress:run": "npm run cypress:start:wait -- \"cypress run\"",
-    "test:e2e": "start-server-and-test start:cli http://localhost:3000/list cy:open",
-    "test:e2e:run": "start-server-and-test serve http://localhost:8811/list cy:run",
-    "serve": "serve --no-clipboard --single --listen 8811 build",
-    "lint": "eslint . --cache-location node_modules/.cache/eslint",
-    "format": "prettier --write \"**/*.+(js|json|css|md|mdx|html)\""
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
