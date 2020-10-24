@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
+    "types": ["cypress", "@testing-library/cypress"],
     "target": "esnext",
     "module": "esnext",
-    "jsx": "preserve",
-    "lib": ["dom", "es2017"],
+    "jsx": "react",
+    "lib": [
+      "dom",
+      "es2017"
+    ],
     "baseUrl": ".",
-    "typeRoots": ["types"],
+    "typeRoots": [
+      "types"
+    ],
     "moduleResolution": "node",
     "strict": false,
     "allowJs": true,
-    "noEmit": false,
+    "noEmit": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,11 +23,22 @@
     "isolatedModules": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": ["next-env.d.ts", "generated/**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.json"]
+  "exclude": [
+    "dist",
+    ".next",
+    "out",
+    "next.config.js"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "generated/**/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.json", "cypress/plugins/index.js"
+  ]
 }
